@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drawing</title>
+
+  <style>
+    #canvas, #canvas2 {
+      border: 1px solid #000;
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="750" height="500"></canvas>
+
+  <br>
+
+  <label for="color-picker">Color:</label>
+  <input type="color" id="color-picker">
+
+  <label for="stroke-size-slider">Size:</label>
+  <input type="range" min="1" max="100" value="20" id="stroke-size-slider"></input>
+
+  <ul>
+    <li><button onclick="selectTool('default-brush')">Brush</button></li>
+    <li><button onclick="selectTool('default-bucket')">Bucket</button></li>
+    <li><button onclick="drawing.clear()">Clear</button></li>
+  </ul>
+
+  <script src="drawing.js"></script>
+  <script src="tools/default-bucket.js"></script>
+  <script src="tools/default-brush.js"></script>
+
+  <script>
+    let strokeSizeSlider = document.getElementById('stroke-size-slider');
+    let colorPicker = document.getElementById('color-picker');
+
+    let drawing = new Drawing(document.getElementById('canvas'), {
+      tool: {
+        selected: 'default-brush',
+        strokeSize: strokeSizeSlider.value,
+        color: colorPicker.value
+      },
+
+      addTools: [ new DefaultBrush(), new DefaultBucket() ]
+    });
+
+    function selectTool(tool) {
+      drawing.setTool({
+        selected: tool
+      });
+    }
+
+    strokeSizeSlider.oninput = function() {
+      drawing.setTool({
+        strokeSize: this.value
+      });
+    }
+
+    colorPicker.oninput = function () {
+      drawing.setTool({
+        color: this.value
+      });
+    }
+  </script>
+
+</body>
+</html>
